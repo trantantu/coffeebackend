@@ -7,6 +7,7 @@ class ThucUongService {
         const thucuong = {
             name: payload.name,
             gia: payload.gia,
+            favorite: payload.favorite,
         };
         Object.keys(thucuong).forEach(
             (key) => thucuong[key] === undefined && delete thucuong[key]
@@ -19,7 +20,7 @@ class ThucUongService {
         const thucuong = this.extractConactData(payload);
         const result = await this.ThucUong.findOneAndUpdate(
             thucuong,
-            { $set: update },
+            { $set: { favorite: thucuong.favorite === true } },
             { returnDocument: "after", upsert: true }
         );
         return result.value;
@@ -28,19 +29,19 @@ class ThucUongService {
 
 
     async findthucuong(filter) {
-        const cursor = await this.ThucUong.findthucuong(filter);
+        const cursor = await this.ThucUong.find(filter);
         return await cursor.toArray();
     }
 
     async findByNamethucuong(name) {
-        return await this.findthucuong({
+        return await this.find({
             name: { $regex: new RegExp(name), $options: "i" },
         });
     }
 
 
     async findByIdthucuong(id) {
-        return await this.ThucUong.findOnethucuong({
+        return await this.ThucUong.findOne({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }

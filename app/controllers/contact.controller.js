@@ -5,7 +5,7 @@ const ApiError = require("../api-error");
 
 exports.create = async (req, res, next) => {
     if (!req.body?.name) {
-        return next(new ApiError(400, "Name cannot be empty"));
+        return next(new ApiError(400, "Ten khong the bo trong"));
     }
     try {
         const contactService = new ContactService(MongoDB.client);
@@ -13,7 +13,7 @@ exports.create = async (req, res, next) => {
         return res.send(document);
     } catch (error) {
         return next(
-            new ApiError(500, "An error occurred while creating the contact")
+            new ApiError(500, "Da xay ra loi khi tao nhan vien")
         );
     }
 };
@@ -32,7 +32,7 @@ exports.findAll = async (req, res, next) => {
         }
     } catch (error) {
         return next(
-            new ApiError(500, "An error occcurred while retrieving contacts")
+            new ApiError(500, "Da xay ra loi khi tim nhan vien")
         );
     }
     return res.send(documents);
@@ -45,12 +45,12 @@ exports.findOne = async (req, res, next) => {
         const contactService = new ContactService(MongoDB.client);
         const document = await contactService.findById(req.params.id);
         if (!document) {
-            return next(new ApiError(404, "Contact not found"));
+            return next(new ApiError(404, "Khong tim thay nhan vien"));
         }
         return res.send(document);
     } catch (error) {
         return next(
-            new ApiError(500, 'Error retrieving contact with id= ' + req.params.id + '')
+            new ApiError(500, 'Loi khi tim nhan vien id= ' + req.params.id + '')
         );
     }
 };
@@ -59,18 +59,18 @@ exports.findOne = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
-        return next(new ApiError(400, "Data to update cannot be empty"));
+        return next(new ApiError(400, "Du lieu cap nhat khong the bo trong"));
     }
     try {
         const contactService = new ContactService(MongoDB.client);
         const document = await contactService.update(req.params.id, req.body);
         if (!document) {
-            return next(new ApiError(404, "Contact not found"));
+            return next(new ApiError(404, "Khong tim thay nhan vien"));
         }
-        return res.send({ massage: "Contact was update successfully" });
+        return res.send({ massage: "Nhan vien da cap nhat thanh cong" });
     } catch (error) {
         return next(
-            new ApiError(500, 'Error updating contact with id=' + req.params.id + '')
+            new ApiError(500, 'Loi khi cap nhat nhan vien id=' + req.params.id + '')
         );
 
     }
@@ -84,12 +84,12 @@ exports.delete = async (req, res, next) => {
         const contactService = new ContactService(MongoDB.client);
         const document = await contactService.delete(req.params.id, req.body);
         if (!document) {
-            return next(new ApiError(404, "Contact not found"));
+            return next(new ApiError(404, "Khong tim thay nhan vien"));
         }
-        return res.send({ massage: "Contact was delete successfully" });
+        return res.send({ massage: "Xoa nhan vien thanh cong" });
     } catch (error) {
         return next(
-            new ApiError(500, 'Could not delete contact with id=' + req.params.id + '')
+            new ApiError(500, 'Khong the xoa nhan vien id=' + req.params.id + '')
         );
 
     }
@@ -101,11 +101,11 @@ exports.deleteAll = async (_req, res, next) => {
     try {
         const contactService = new ContactService(MongoDB.client);
         const deleteCount = await contactService.deleteAll();
-        return res.send({ massage: `${deleteCount} contacts were deleted successfully`, });
+        return res.send({ massage: `${deleteCount} nhan vien da duoc xoa thanh cong`, });
     } catch (error) {
         console.log(error)
         return next(
-            new ApiError(500, "An error occurred while removing all contacts")
+            new ApiError(500, "Loi khi xoa tat ca nhan vien")
         );
 
     }
@@ -119,7 +119,7 @@ exports.findAllFavorite = async (_req, res, next) => {
         return res.send(documents);
     } catch (error) {
         return next(
-            new ApiError(500, "An error occurred while retrieving favorite contacts")
+            new ApiError(500, "Loi khi tim kiem nhan vien duoc yeu thich")
         );
 
     }
